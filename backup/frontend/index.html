@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Karolina & Jonas — August 21, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+  <!-- ─── OVERLAY: Guest Access ─────────────────────────────────── -->
+  <div id="access-overlay" class="overlay active">
+    <canvas id="overlay-canvas"></canvas>
+    <div class="overlay-content">
+      <div class="monogram">K <span class="amp">&</span> J</div>
+      <h1 class="invitation-title">Together Forever</h1>
+      <p class="invitation-sub">Karolina & Jonas<br />request the honour of your presence</p>
+      <div class="divider-ornament">❧</div>
+      <p class="access-label">Enter your guest code to continue</p>
+      <div class="input-group">
+        <input type="text" id="guest-code" placeholder="Guest Code" autocomplete="off" maxlength="12" />
+        <button id="enter-btn" class="btn-gold">Enter</button>
+      </div>
+      <p id="access-error" class="error-msg hidden">That code isn't on our list — please check your invitation.</p>
+      <p class="access-hint">Your unique code is printed on your invitation envelope.</p>
+    </div>
+  </div>
+
+  <!-- ─── MAIN APP ───────────────────────────────────────────────── -->
+  <div id="app" class="hidden">
+
+    <!-- Bottom Nav -->
+    <nav id="bottom-nav">
+      <button class="nav-btn active" data-page="welcome">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span>Welcome</span>
+      </button>
+      <button class="nav-btn" data-page="rsvp">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>RSVP</span>
+      </button>
+      <button class="nav-btn" data-page="schedule">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Schedule</span>
+      </button>
+      <button class="nav-btn" data-page="gallery">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+        <span>Gallery</span>
+      </button>
+    </nav>
+
+    <!-- ── PAGE: Welcome ────────────────────────────────────────── -->
+    <section id="page-welcome" class="page active">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-content">
+        <p class="eyebrow gsap-fade">The Wedding of</p>
+        <h1 class="hero-names gsap-slide">
+          <span class="name-line">Karolina</span>
+          <em class="name-amp">&</em>
+          <span class="name-line">Jonas</span>
+        </h1>
+        <p class="hero-date gsap-fade">August 21 · 2026 · Krakow, Poland</p>
+        <div class="hero-divider gsap-fade">— ✦ —</div>
+      </div>
+      <div class="welcome-cards">
+        <div class="info-card gsap-card">
+          <div class="card-icon">🕐</div>
+          <h3>Ceremony</h3>
+          <p>3:00 PM<br />The Garden Pavilion</p>
+        </div>
+        <div class="info-card gsap-card">
+          <div class="card-icon">🥂</div>
+          <h3>Reception</h3>
+          <p>6:00 PM<br />The Grand Ballroom</p>
+        </div>
+        <div class="info-card gsap-card">
+          <div class="card-icon">🌹</div>
+          <h3>Dress Code</h3>
+          <p>Black Tie<br />Optional</p>
+        </div>
+      </div>
+      <div class="welcome-letter gsap-fade">
+        <p class="letter-text">
+          "We are so grateful you've made the journey to celebrate this day with us. Your presence means the world to us
+          both — welcome to our story."
+        </p>
+        <p class="letter-sig">— Karolina & Jonas</p>
+      </div>
+      <div class="countdown-block gsap-fade">
+        <p class="countdown-label">Days Until We Say I Do</p>
+        <div id="countdown" class="countdown-digits">
+          <div class="digit-group"><span id="cd-days">--</span><small>days</small></div>
+          <div class="digit-group"><span id="cd-hours">--</span><small>hours</small></div>
+          <div class="digit-group"><span id="cd-mins">--</span><small>mins</small></div>
+        </div>
+      </div>
+      <div class="map-block gsap-fade">
+        <h3 class="section-heading">Find Us</h3>
+        <div class="map-card">
+          <div class="map-address">
+            <p><strong>Ashford Estate</strong></p>
+            <p>14 Blossom Lane<br />Kent, TN25 4HJ<br />United Kingdom</p>
+            <a href="https://maps.google.com?q=Ashford+Estate+Kent" target="_blank" class="btn-outline">Open in Maps</a>
+          </div>
+        </div>
+      </div>
+      <div class="page-spacer"></div>
+    </section>
+
+    <!-- ── PAGE: RSVP ────────────────────────────────────────────── -->
+    <section id="page-rsvp" class="page">
+      <div class="page-header">
+        <p class="eyebrow">Kindly Reply By May 1, 2026</p>
+        <h2 class="page-title">Your RSVP</h2>
+        <div class="title-ornament">❧</div>
+      </div>
+      <div id="rsvp-form-wrap">
+        <div class="rsvp-form gsap-fade">
+          <div class="form-group">
+            <label>Your Full Name</label>
+            <input type="text" id="rsvp-name" placeholder="As on your invitation" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="rsvp-email" placeholder="For updates & details" />
+          </div>
+          <div class="form-group">
+            <label>Will you be joining us?</label>
+            <div class="toggle-group">
+              <button class="toggle-btn active" data-val="yes">Joyfully Accepts</button>
+              <button class="toggle-btn" data-val="no">Regretfully Declines</button>
+            </div>
+          </div>
+          <div id="rsvp-attending-fields">
+            <div class="form-group">
+              <label>Number of Guests (including yourself)</label>
+              <div class="stepper">
+                <button class="step-btn" id="step-down">−</button>
+                <span id="guest-count">1</span>
+                <button class="step-btn" id="step-up">+</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Dietary Requirements</label>
+              <div class="check-group">
+                <label class="check-item"><input type="checkbox" value="vegetarian" /> Vegetarian</label>
+                <label class="check-item"><input type="checkbox" value="vegan" /> Vegan</label>
+                <label class="check-item"><input type="checkbox" value="gluten-free" /> Gluten-Free</label>
+                <label class="check-item"><input type="checkbox" value="halal" /> Halal</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Song Request for the Dance Floor</label>
+              <input type="text" id="song-request" placeholder="What song gets you dancing?" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>A message for the couple (optional)</label>
+            <textarea id="rsvp-message" placeholder="Share your wishes..." rows="3"></textarea>
+          </div>
+          <button id="rsvp-submit" class="btn-gold full-width">Send My RSVP</button>
+          <p id="rsvp-feedback" class="feedback-msg hidden"></p>
+        </div>
+      </div>
+      <div class="page-spacer"></div>
+    </section>
+
+    <!-- ── PAGE: Schedule ───────────────────────────────────────── -->
+    <section id="page-schedule" class="page">
+      <div class="page-header">
+        <p class="eyebrow">August 21, 2026</p>
+        <h2 class="page-title">The Day</h2>
+        <div class="title-ornament">❧</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item gsap-timeline" data-delay="0">
+          <div class="timeline-time">2:00 PM</div>
+          <div class="timeline-dot"><span>🌿</span></div>
+          <div class="timeline-card">
+            <h4>Guest Arrival</h4>
+            <p>Welcome drinks & canapés in the Orangery. Meet the wedding party.</p>
+            <div class="timeline-location">📍 The Orangery</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.1">
+          <div class="timeline-time">3:00 PM</div>
+          <div class="timeline-dot"><span>💍</span></div>
+          <div class="timeline-card highlight">
+            <h4>Wedding Ceremony</h4>
+            <p>Karolina and Jonas exchange their vows in the sunlit Garden Pavilion.</p>
+            <div class="timeline-location">📍 Garden Pavilion</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.2">
+          <div class="timeline-time">4:00 PM</div>
+          <div class="timeline-dot"><span>📸</span></div>
+          <div class="timeline-card">
+            <h4>Photography & Cocktail Hour</h4>
+            <p>Explore the estate grounds while we capture our first moments together.</p>
+            <div class="timeline-location">📍 Estate Grounds</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.3">
+          <div class="timeline-time">6:00 PM</div>
+          <div class="timeline-dot"><span>🍽️</span></div>
+          <div class="timeline-card">
+            <h4>Wedding Breakfast</h4>
+            <p>A three-course dinner by award-winning chef Hugo Delacroix. Please find your seat.</p>
+            <div class="timeline-location">📍 Grand Ballroom</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.4">
+          <div class="timeline-time">8:00 PM</div>
+          <div class="timeline-dot"><span>🥂</span></div>
+          <div class="timeline-card">
+            <h4>Speeches & Toasts</h4>
+            <p>Heartfelt words from those closest to the couple.</p>
+            <div class="timeline-location">📍 Grand Ballroom</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.5">
+          <div class="timeline-time">9:00 PM</div>
+          <div class="timeline-dot"><span>💃</span></div>
+          <div class="timeline-card highlight">
+            <h4>First Dance & Evening Reception</h4>
+            <p>The dance floor opens. Live music by The Ashford Quartet until midnight.</p>
+            <div class="timeline-location">📍 Grand Ballroom</div>
+          </div>
+        </div>
+        <div class="timeline-item gsap-timeline" data-delay="0.6">
+          <div class="timeline-time">12:00 AM</div>
+          <div class="timeline-dot"><span>🌙</span></div>
+          <div class="timeline-card">
+            <h4>Farewell & Safe Travels</h4>
+            <p>Carriages arranged. Thank you for making this night unforgettable.</p>
+            <div class="timeline-location">📍 Estate Entrance</div>
+          </div>
+        </div>
+      </div>
+      <div class="page-spacer"></div>
+    </section>
+
+    <!-- ── PAGE: Gallery ────────────────────────────────────────── -->
+    <section id="page-gallery" class="page">
+      <div class="page-header">
+        <p class="eyebrow">Shared Memories</p>
+        <h2 class="page-title">Our Gallery</h2>
+        <div class="title-ornament">❧</div>
+      </div>
+      <div class="gallery-tabs">
+        <button class="gtab active" data-tab="all">All</button>
+        <button class="gtab" data-tab="official">Official</button>
+        <button class="gtab" data-tab="guests">Guests</button>
+      </div>
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-icon">📷</div>
+        <p>Share your photos from the day</p>
+        <p class="upload-hint">Tap to choose or drag & drop</p>
+        <input type="file" id="photo-upload" accept="image/*" multiple hidden />
+        <button class="btn-outline" id="upload-trigger">Choose Photos</button>
+      </div>
+      <div id="upload-progress" class="upload-progress hidden">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p id="progress-label">Uploading...</p>
+      </div>
+      <div id="gallery-grid" class="gallery-grid">
+        <!-- Populated by JS -->
+      </div>
+      <div id="gallery-empty" class="gallery-empty hidden">
+        <p>No photos yet — be the first to share a memory!</p>
+      </div>
+      <div class="page-spacer"></div>
+    </section>
+
+  </div><!-- /app -->
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden">
+    <button id="lightbox-close" class="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="" />
+    <p id="lightbox-caption"></p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
