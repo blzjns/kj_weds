@@ -1,5 +1,11 @@
 import type { Guest } from "@/types/guest";
-import { sql } from "bun";
+import { SQL } from "bun";
+
+const sql = new SQL({
+    url: process.env.DATABASE_URL,
+    max: 10, // Reduce maximum connections if hitting server limits
+    idleTimeout: 0, // 0 disables idle closing, or set it higher (in seconds)
+});
 
 export enum GuestStatus { NotFound, Unauthorized, InvalidCode };
 
