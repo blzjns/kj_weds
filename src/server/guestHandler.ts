@@ -1,10 +1,24 @@
 import type { Guest } from "@/types/guest";
 import { SQL } from "bun";
 
+// const sql = new SQL({
+//     url: process.env.DATABASE_URL,
+//     max: 10, // Reduce maximum connections if hitting server limits
+//     idleTimeout: 0, // 0 disables idle closing, or set it higher (in seconds)
+// });
+
+const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
+if (!DB_HOST || !DB_PORT || !DB_NAME || !DB_USER || !DB_PASSWORD) {
+    throw new Error('Missing database credentials');
+}
+
 const sql = new SQL({
-    url: process.env.DATABASE_URL,
-    max: 10, // Reduce maximum connections if hitting server limits
-    idleTimeout: 0, // 0 disables idle closing, or set it higher (in seconds)
+    hostname: DB_HOST,
+    port: DB_PORT,
+    username: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    tls: true // 👈 Critical for Render SSL requirement
 });
 
 export enum GuestStatus { NotFound, Unauthorized, InvalidCode };
