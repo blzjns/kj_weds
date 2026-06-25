@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot src/server.ts",
+    "dev": "bun --hot src/server/index.ts",
     "build": "bun build ./src/frontend/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
-    "start": "NODE_ENV=production bun src/server.ts"
+    "start": "NODE_ENV=production bun src/server/index.ts"
   },
   "dependencies": {
     "gsap": "^3.15.0",

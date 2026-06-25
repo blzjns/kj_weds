@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { initParticles } from '../../particles.js';
-import type { Canvas } from '@/frontend/types/misc.js';
+import type { Canvas } from '@/types/misc.js';
 
 interface TimeState {
   days?: string;

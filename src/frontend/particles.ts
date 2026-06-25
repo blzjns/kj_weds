@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { ParticleSystem } from './types/misc';
+import type { ParticleSystem } from '../types/misc';
 
 /**
  * Initialises Three.js floating rose-petal particles on the given canvas element.

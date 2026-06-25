@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { initParticles } from '../particles.js';
-import type { Guest, onUnlockFn } from '@/frontend/types/guest.js';
-import type { Canvas, ParticleSystem } from '@/frontend/types/misc.js';
+import { Role, type Guest, type onUnlockFn } from '@/types/guest.js';
+import type { Canvas, ParticleSystem } from '@/types/misc.js';
+import { getCookie, setCookie } from '../utils/cookie.js';
+import { SESSION_MAX_AGE } from '@/session.constants.js';
 
 export interface AccessOverlayProps {
   onUnlock: onUnlockFn
@@ -18,6 +20,15 @@ export default function AccessOverlay({ onUnlock }: AccessOverlayProps) {
   const particlesRef = useRef<ParticleSystem>(null);
 
   useEffect(() => {
+    const revealAppIfSessionId = async () => {
+      const sessionIdCookie = await getCookie('session-id');
+      if (sessionIdCookie) {
+        const guest: Guest = JSON.parse(sessionStorage.getItem('guest') || '{}');
+        revealApp(guest);
+      }
+    };
+    revealAppIfSessionId();
+
     if (!canvasRef.current) return;
     particlesRef.current = initParticles(canvasRef.current, { count: 55, span: 10 });
 
@@ -49,21 +60,23 @@ export default function AccessOverlay({ onUnlock }: AccessOverlayProps) {
 
       if (res.ok && data.ok) {
         sessionStorage.setItem('guest', JSON.stringify(data.guest));
+        await setCookie({ name: 'session-id', value: data.guest.sessionId, maxAge: SESSION_MAX_AGE });
         revealApp(data.guest);
       } else {
         setError(true);
         setLoading(false);
       }
     } catch {
-      const upper = code.trim().toUpperCase();
-      if (upper === 'DEMO2026' || upper === 'WEDDING') {
-        const guest = { name: 'Demo Guest', tag: 'guests' };
-        sessionStorage.setItem('guest', JSON.stringify(guest));
-        revealApp(guest);
-      } else {
-        setError(true);
-        setLoading(false);
-      }
+      // const upper = code.trim().toUpperCase();
+      // if (upper === 'DEMO2026' || upper === 'WEDDING') {
+      //   const guest: Guest = { name: 'Demo Guest', role: Role.Guest, sessionId: 'demo2026' };
+      //   sessionStorage.setItem('guest', JSON.stringify(guest));
+      //   await setCookie({ name: 'session-id', value: guest.sessionId, maxAge: SESSION_MAX_AGE });
+      //   revealApp(guest);
+      // } else {
+      //   setError(true);
+      //   setLoading(false);
+      // }
     }
   }
 

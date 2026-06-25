@@ -3,7 +3,8 @@
     // Environment setup & latest features
     "lib": [
       "ESNext",
-      "DOM"
+      "DOM",
+      "DOM.Iterable"
     ],
     "target": "ESNext",
     "module": "Preserve",

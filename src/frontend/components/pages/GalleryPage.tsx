@@ -1,32 +1,42 @@
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-const OFFICIAL_PHOTOS = [
-  { id: 'official-1', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80', caption: 'Engagement Photo — Kent', tag: 'official' },
-  { id: 'official-2', url: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=400&q=80', caption: 'A walk in the garden', tag: 'official' },
-  { id: 'official-3', url: 'https://images.unsplash.com/photo-1511285560929-80b456503681?w=400&q=80', caption: 'Our favourite evening', tag: 'official' },
-  { id: 'official-4', url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400&q=80', caption: 'The ring', tag: 'official' },
-  { id: 'official-5', url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400&q=80', caption: 'Ashford Estate', tag: 'official' },
-  { id: 'official-6', url: 'https://images.unsplash.com/photo-1543465077-db45d34b88a5?w=400&q=80', caption: 'The flowers', tag: 'official' },
-];
+type Photo = {
+  id: string;
+  url: string;
+  caption: string;
+  tag: string;
+}
 
-function Lightbox({ photo, onClose }) {
+function Lightbox({ photo, onClose }: { photo: S3File | undefined, onClose: () => void }) {
   if (!photo) return null;
   return (
     <div className="lightbox" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <button className="lightbox-close" onClick={onClose}>✕</button>
-      <img src={photo.url} alt={photo.caption || 'Photo'} />
-      {photo.caption && <p className="lightbox-caption">{photo.caption}</p>}
+      <img src={`/api/photos/${photo.key}`} alt={photo.eTag || 'Photo'} />
+      {photo.eTag && <p className="lightbox-caption">{photo.eTag}</p>}
+
+      {/* <iframe src={`https://drive.google.com/file/d/${photo.id}/preview`} width="90%" height="90%"></iframe> */}
     </div>
   );
 }
 
+type S3File = {
+  key: string;
+  eTag: string;
+  lastModified: string;
+  size: number; // bytes
+  storageClass: string;
+}
+
+type UploadProgress = { pct: number; label: string } | undefined;
+
 export default function GalleryPage() {
-  const [photos, setPhotos] = useState(OFFICIAL_PHOTOS);
+  const [photos, setPhotos] = useState<S3File[]>([]);
   const [activeTab, setActiveTab] = useState('all');
-  const [lightbox, setLightbox] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(null); // null | { pct, label }
-  const fileInputRef = useRef(null);
+  const [lightbox, setLightbox] = useState<S3File>();
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load gallery from API on mount
   useEffect(() => {
@@ -34,9 +44,9 @@ export default function GalleryPage() {
       try {
         const res = await fetch('/api/photos', { credentials: 'include' });
         const data = await res.json();
-        setPhotos([...OFFICIAL_PHOTOS, ...(data.photos || [])]);
+        setPhotos([...(data || [])]);
       } catch {
-        setPhotos(OFFICIAL_PHOTOS);
+        setPhotos([]);
       }
     }
     load();
@@ -52,7 +62,7 @@ export default function GalleryPage() {
 
   const filtered = activeTab === 'all' ? photos : photos.filter((p) => p.tag === activeTab);
 
-  async function handleUpload(files) {
+  async function handleUpload(files: FileList) {
     if (!files || !files.length) return;
     const total = files.length;
     let done = 0;
@@ -67,15 +77,15 @@ export default function GalleryPage() {
       try {
         const res = await fetch('/api/photos/upload', { method: 'POST', credentials: 'include', body: formData });
         const data = await res.json();
-        if (data.photo) setPhotos((prev) => [...prev, data.photo]);
+        if (data.length > 0) setPhotos(data);
       } catch {
-        const localUrl = URL.createObjectURL(file);
-        setPhotos((prev) => [...prev, {
-          id: `local-${Date.now()}`,
-          url: localUrl,
-          caption: file.name.replace(/\.[^.]+$/, ''),
-          tag: 'guests',
-        }]);
+        // const localUrl = URL.createObjectURL(file);
+        // setPhotos((prev) => [...prev, {
+        //   id: `local-${Date.now()}`,
+        //   url: localUrl,
+        //   caption: file.name.replace(/\.[^.]+$/, ''),
+        //   tag: 'guests',
+        // }]);
       }
 
       done++;
@@ -83,7 +93,7 @@ export default function GalleryPage() {
     }
 
     setTimeout(() => {
-      setUploadProgress(null);
+      setUploadProgress(undefined);
       setActiveTab('guests');
     }, 2000);
   }
@@ -97,7 +107,7 @@ export default function GalleryPage() {
       </div>
 
       <div className="gallery-tabs">
-        {['all', 'official', 'guests'].map((tab) => (
+        {['all', 'official', 'guests', 'yours'].map((tab) => (
           <button
             key={tab}
             className={`gtab${activeTab === tab ? ' active' : ''}`}
@@ -111,9 +121,18 @@ export default function GalleryPage() {
       <div
         className="upload-zone"
         id="upload-zone"
-        onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--gold-light)'; }}
-        onDragLeave={(e) => { e.currentTarget.style.borderColor = 'var(--gold)'; }}
-        onDrop={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--gold)'; handleUpload(e.dataTransfer.files); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.currentTarget.style.borderColor = 'var(--gold-light)';
+        }}
+        onDragLeave={(e) => {
+          e.currentTarget.style.borderColor = 'var(--gold)';
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.currentTarget.style.borderColor = 'var(--gold)';
+          handleUpload(e.dataTransfer.files);
+        }}
       >
         <div className="upload-icon">📷</div>
         <p>Share your photos from the day</p>
@@ -125,7 +144,7 @@ export default function GalleryPage() {
           multiple
           hidden
           ref={fileInputRef}
-          onChange={(e) => handleUpload(e.target.files)}
+          onChange={(e) => handleUpload(e.target.files as FileList)}
         />
         <button className="btn-outline" id="upload-trigger" onClick={() => fileInputRef.current?.click()}>
           Choose Photos
@@ -143,7 +162,11 @@ export default function GalleryPage() {
 
       {filtered.length > 0 ? (
         <div id="gallery-grid" className="gallery-grid">
-          {filtered.map((photo) => (
+          {photos.map(photo => (
+            <img key={photo.key} className="gallery-item" src={`/api/photos/${photo.key}`} onClick={() => setLightbox(photo)} />
+          ))}
+
+          {/* {filtered.map((photo) => (
             <div
               key={photo.id}
               className="gallery-item"
@@ -152,7 +175,7 @@ export default function GalleryPage() {
               <img src={photo.url} alt={photo.caption || 'Photo'} loading="lazy" />
               <span className="photo-tag">{photo.tag === 'official' ? '✦' : '❤'}</span>
             </div>
-          ))}
+          ))} */}
         </div>
       ) : (
         <div id="gallery-empty" className="gallery-empty">
@@ -162,7 +185,7 @@ export default function GalleryPage() {
 
       <div className="page-spacer" />
 
-      <Lightbox photo={lightbox} onClose={() => setLightbox(null)} />
+      <Lightbox photo={lightbox} onClose={() => setLightbox(undefined)} />
     </section>
   );
 }

@@ -239,6 +239,33 @@ textarea {
   padding-bottom: var(--nav-h);
 }
 
+#header-actions {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  text-align: right;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+#header-actions:hover {
+  opacity: 1;
+}
+
+#header-actions .action-btn {
+  width: 17px;
+  background-color: transparent;
+  border: none;
+  margin: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#header-actions .action-btn>svg {
+  fill: #c0c0c0;
+  stroke: #c0c0c0;
+}
+
 /* ─── Bottom Nav ─────────────────────────────────────────────── */
 #bottom-nav {
   position: fixed;
@@ -308,6 +335,7 @@ textarea {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -889,34 +917,19 @@ textarea {
   padding: 0 var(--page-pad);
 }
 
-.gallery-item {
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-}
-
-.gallery-item img {
+.gallery-grid img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border: none;
+  border-radius: 8px;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.gallery-item:active img {
-  transform: scale(0.96);
-}
-
-.gallery-item .photo-tag {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  background: rgba(201, 169, 110, 0.9);
-  border-radius: 4px;
-  font-size: 0.6rem;
-  padding: 1px 5px;
-  color: var(--ink);
+.gallery-grid img:hover {
+  box-shadow: -5px -5px 20px 0 var(--gold-light);
+  filter: brightness(1.2) saturate(0.8);
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .gallery-empty {
