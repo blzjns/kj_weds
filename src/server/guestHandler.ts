@@ -1,5 +1,5 @@
 import type { Guest } from "@/types/guest";
-import { SQL } from "bun";
+import { sql } from "bun";
 
 // const sql = new SQL({
 //     url: process.env.DATABASE_URL,
@@ -12,14 +12,14 @@ if (!DB_HOST || !DB_PORT || !DB_NAME || !DB_USER || !DB_PASSWORD) {
     throw new Error('Missing database credentials');
 }
 
-const sql = new SQL({
-    hostname: DB_HOST,
-    port: DB_PORT,
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    tls: true // 👈 Critical for Render SSL requirement
-});
+// const sql = new SQL({
+//     hostname: DB_HOST,
+//     port: DB_PORT,
+//     username: DB_USER,
+//     password: DB_PASSWORD,
+//     database: DB_NAME,
+//     tls: true // 👈 Critical for Render SSL requirement
+// });
 
 export enum GuestStatus { NotFound, Unauthorized, InvalidCode };
 
